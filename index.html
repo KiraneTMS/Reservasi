@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reservasi Meja</title>
+  <style>
+    :root {
+      --primary: #27ae60;
+      --primary-dark: #219653;
+      --danger: #e74c3c;
+      --danger-dark: #c0392b;
+      --purple: #8e44ad;
+      --purple-dark: #732d91;
+      --light: #f5f5f5;
+      --dark: #2c3e50;
+      --yellow: #f1c40f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--light);
+      margin: 0;
+      padding: 16px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--dark);
+      margin: 0.6em 0 0.2em;
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin: 0 0 1.5rem;
+      font-size: clamp(0.95rem, 4vw, 1.1rem);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 1.2rem 0 1.8rem;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: clamp(0.9rem, 3.5vw, 1rem);
+      min-height: 44px;
+    }
+
+    button:hover { opacity: 0.92; }
+    button:active { transform: scale(0.97); }
+
+    button.primary     { background: var(--primary); }
+    button.primary:hover { background: var(--primary-dark); }
+    button.danger      { background: var(--danger); }
+    button.danger:hover { background: var(--danger-dark); }
+    button.config      { background: var(--purple); }
+    button.config:hover { background: var(--purple-dark); }
+    button.secondary   { background: #95a5a6; }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    table {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 2rem;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      font-size: clamp(0.9rem, 3.2vw, 1rem);
+    }
+
+    th {
+      background: var(--yellow);
+      color: var(--dark);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ── Wider No Meja column so 2-digit numbers are fully visible ── */
+    th:nth-child(6), td:nth-child(6) {
+      width: 140px;          /* ← made wider – enough for "16", "25", etc. */
+      min-width: 120px;
+      max-width: 180px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 1rem;
+      min-height: 40px;
+    }
+
+    select.meja option:disabled {
+      background: #ffe6e6 !important;
+      color: #c62828 !important;
+      font-weight: 500;
+    }
+
+    .lunas { background-color: #e8f5e9 !important; }
+    .dp    { background-color: #fff3cd !important; }
+
+    .nominal input {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .action-cell {
+      white-space: nowrap;
+      text-align: center;
+      padding: 8px 4px !important;
+    }
+
+    .action-cell button {
+      margin: 2px;
+      padding: 6px 10px;
+      font-size: 0.88rem;
+      min-width: 68px;
+    }
+
+    .check-col {
+      width: 44px;
+      text-align: center;
+    }
+
+    #meja-summary {
+      margin: 2rem auto;
+      padding: 1.2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      max-width: 100%;
+    }
+
+    #meja-summary h2 {
+      margin: 0 0 1rem;
+      text-align: center;
+      font-size: clamp(1.2rem, 5vw, 1.5rem);
+    }
+
+    .meja-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+      gap: 10px;
+      padding: 8px;
+    }
+
+    .meja-box {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: clamp(0.9rem, 3.5vw, 1rem);
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+    }
+
+    .meja-box:hover { transform: scale(1.06); }
+
+    .meja-box.tersedia {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #a5d6a7;
+    }
+
+    .meja-box.dipesan {
+      background: #ffebee;
+      color: #c62828;
+      border: 2px solid #ef9a9a;
+    }
+
+    .meja-box span.number {
+      font-size: clamp(1.4rem, 6vw, 1.9rem);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .meja-box span {
+      font-size: 0.82rem;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    /* ── MOBILE RESPONSIVE CARD LAYOUT FOR TABLE ── */
+    @media (max-width: 768px) {
+      /* Hide standard table headers */
+      #rsvTable thead {
+        display: none;
+      }
+
+      /* Remove table structure */
+      #rsvTable, #rsvTable tbody, #rsvTable tr, #rsvTable td {
+        display: block;
+        width: 100%;
+      }
+
+      /* Style rows as floating cards */
+      #rsvTable tr {
+        background: white;
+        margin-bottom: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+      }
+
+      /* Style cells to sit side-by-side with labels */
+      #rsvTable td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 4px;
+        border-bottom: 1px solid #f3f4f6;
+        text-align: right;
+      }
+
+      #rsvTable td:last-child {
+        border-bottom: none;
+      }
+
+      /* Use data-label attribute to create mobile headers */
+      #rsvTable td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--dark);
+        flex-basis: 40%;
+        text-align: left;
+        font-size: 0.95rem;
+      }
+
+      /* Adjust inputs for smaller width */
+      #rsvTable td input,
+      #rsvTable td select {
+        flex: 1;
+        width: 100%;
+        max-width: 60%;
+        margin-left: 10px;
+        text-align: left;
+      }
+
+      /* Custom overrides for Checkbox */
+      #rsvTable td.check-col::before {
+        content: "Pilih";
+      }
+      #rsvTable td.check-col {
+        background: #fdfdfd;
+        border-radius: 6px 6px 0 0;
+        justify-content: center;
+      }
+      #rsvTable td.check-col input {
+        width: 24px;
+        height: 24px;
+        flex-grow: 0;
+        margin: 0;
+      }
+
+      /* Action buttons */
+      #rsvTable td.action-cell {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding-top: 12px;
+      }
+      #rsvTable td.action-cell::before {
+        display: none;
+      }
+      #rsvTable td.action-cell button {
+        width: 100%;
+        margin: 0;
+      }
+
+      /* No Meja full width on mobile (card layout needs it) */
+      th:nth-child(6), td:nth-child(6) {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* Extra small screen tweaks */
+    @media (max-width: 640px) {
+      body { padding: 12px; }
+      .controls { flex-direction: column; align-items: stretch; }
+      button { width: 100%; padding: 12px 16px; font-size: 1.05rem; }
+      .meja-grid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
+      .meja-box span.number { font-size: clamp(1.2rem, 5.5vw, 1.6rem); }
+    }
+
+    @media (max-width: 480px) {
+      .meja-grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<h1 id="storeTitle">Reservasi Meja</h1>
+<p class="subtitle" id="subtitle">Memuat konfigurasi...</p>
+
+<div class="controls">
+  <button class="primary" onclick="addRow()">+ Reservasi Baru</button>
+  <button class="danger" id="bulkDeleteBtn" onclick="hapusTerpilih()" disabled>Hapus Terpilih</button>
+  <button class="config" onclick="konfigurasiUlang()">Konfigurasi Nama & Jumlah Meja</button>
+  <button class="secondary" onclick="clearAllData()">Reset Semua Data</button>
+</div>
+
+<table id="rsvTable">
+  <thead>
+    <tr>
+      <th class="check-col"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
+      <th>Tanggal</th>
+      <th>Nama</th>
+      <th>Nomor HP</th>
+      <th>Pax</th>
+      <th>No Meja</th>
+      <th>DP / Lunas</th>
+      <th class="nominal">NOMINAL</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<div id="meja-summary">
+  <h2>Status Semua Meja</h2>
+  <div class="meja-grid" id="mejaGrid"></div>
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+// CONFIG & STORAGE
+// ────────────────────────────────────────────────
+const CONFIG_KEY = "reservasi-config";
+const DATA_KEY   = "reservasi-data";
+
+let JUMLAH_MEJA = 25;
+let STORE_NAME  = "Reservasi Meja";
+
+function loadConfig() {
+  const saved = localStorage.getItem(CONFIG_KEY);
+  if (saved) {
+    const cfg = JSON.parse(saved);
+    STORE_NAME  = cfg.name   || STORE_NAME;
+    JUMLAH_MEJA = Number(cfg.tables) || JUMLAH_MEJA;
+  }
+}
+
+function saveConfig() {
+  localStorage.setItem(CONFIG_KEY, JSON.stringify({
+    name: STORE_NAME,
+    tables: JUMLAH_MEJA
+  }));
+}
+
+function updateDisplay() {
+  document.getElementById("storeTitle").textContent = STORE_NAME;
+  document.getElementById("subtitle").textContent = `Total Meja: ${JUMLAH_MEJA}`;
+  refreshAll();
+}
+
+function konfigurasiUlang() {
+  const namaBaru = prompt("Nama event / toko saat ini:", STORE_NAME);
+  const jmlBaruStr = prompt("Jumlah meja saat ini:", JUMLAH_MEJA);
+
+  let changed = false;
+
+  if (namaBaru !== null && namaBaru.trim() !== STORE_NAME) {
+    STORE_NAME = namaBaru.trim();
+    changed = true;
+  }
+
+  if (jmlBaruStr !== null) {
+    const jml = Number(jmlBaruStr);
+    if (!Number.isNaN(jml) && jml !== JUMLAH_MEJA && jml >= 1 && jml <= 500) {
+      if (jml < JUMLAH_MEJA && !confirm(`Mengurangi dari ${JUMLAH_MEJA} menjadi ${jml} meja?\nMeja bernomor lebih tinggi tidak akan muncul lagi di dropdown.`)) {
+        return;
+      }
+      JUMLAH_MEJA = jml;
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    saveConfig();
+    updateDisplay();
+    alert("Konfigurasi berhasil diperbarui.");
+  }
+}
+
+function initConfig() {
+  loadConfig();
+  if (!localStorage.getItem(CONFIG_KEY)) {
+    const nama = prompt("Nama toko / event:", "Cimahi RSV Ramadhan 2026");
+    const jml  = prompt("Jumlah meja:", "25");
+
+    if (nama?.trim()) STORE_NAME = nama.trim();
+    const parsed = Number(jml);
+    if (!Number.isNaN(parsed)) {
+      JUMLAH_MEJA = Math.max(1, Math.min(500, parsed));
+    }
+    saveConfig();
+  }
+  updateDisplay();
+}
+
+// ────────────────────────────────────────────────
+// DATA & MEJA LOGIC
+// ────────────────────────────────────────────────
+function loadData() {
+  const saved = localStorage.getItem(DATA_KEY);
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveData() {
+  const rows = [];
+  document.querySelectorAll('#tableBody tr').forEach(tr => {
+    rows.push({
+      tanggal: tr.querySelector('.tanggal').value,
+      nama:    tr.querySelector('.nama').value,
+      hp:      tr.querySelector('.hp').value,
+      pax:     tr.querySelector('.pax').value,
+      meja:    tr.querySelector('.meja').value,
+      status:  tr.querySelector('.status').value,
+      nominal: tr.querySelector('.nominal-input').value
+    });
+  });
+  localStorage.setItem(DATA_KEY, JSON.stringify(rows));
+}
+
+function getBookedMejaSet() {
+  const set = new Set();
+  document.querySelectorAll('.meja').forEach(s => s.value && set.add(s.value));
+  return set;
+}
+
+function parseMejaRangeOrList(input) {
+  const result = [];
+  const parts = input.split(',').map(p => p.trim());
+  for (const part of parts) {
+    if (part.includes('-')) {
+      const [a, b] = part.split('-').map(n => Number(n.trim()));
+      if (!Number.isNaN(a) && !Number.isNaN(b) && a <= b) {
+        for (let i = a; i <= b; i++) result.push(i);
+      }
+    } else {
+      const n = Number(part);
+      if (!Number.isNaN(n)) result.push(n);
+    }
+  }
+  return [...new Set(result)].sort((a,b)=>a-b);
+}
+
+function createMejaOptions(selected = "") {
+  const booked = getBookedMejaSet();
+  let html = '<option value="">—</option>';
+  for (let i = 1; i <= JUMLAH_MEJA; i++) {
+    const val = String(i);
+    const disabled = booked.has(val) && val !== selected;
+    html += `<option value="${i}" ${val === selected ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${i}</option>`;
+  }
+  return html;
+}
+
+function refreshAll() {
+  document.querySelectorAll('.meja').forEach(sel => {
+    sel.innerHTML = createMejaOptions(sel.value);
+  });
+
+  const booked = getBookedMejaSet();
+  const grid = document.getElementById('mejaGrid');
+  grid.innerHTML = '';
+  for (let i = 1; i <= JUMLAH_MEJA; i++) {
+    const div = document.createElement('div');
+    div.className = 'meja-box ' + (booked.has(String(i)) ? 'dipesan' : 'tersedia');
+    div.innerHTML = `<span class="number">${i}</span><span>${booked.has(String(i)) ? 'Dipesan' : 'Tersedia'}</span>`;
+    grid.appendChild(div);
+  }
+
+  updateBulkDeleteButton();
+  saveData();
+}
+
+function updateBulkDeleteButton() {
+  const checked = document.querySelectorAll('input.row-check:checked').length;
+  document.getElementById('bulkDeleteBtn').disabled = checked === 0;
+}
+
+function toggleSelectAll(cb) {
+  document.querySelectorAll('input.row-check').forEach(c => c.checked = cb.checked);
+  updateBulkDeleteButton();
+}
+
+function addRow(data = {}) {
+  const tbody = document.getElementById('tableBody');
+  const tr = document.createElement('tr');
+
+  tr.innerHTML = `
+    <td class="check-col" data-label="Pilih"><input type="checkbox" class="row-check" onchange="updateBulkDeleteButton()"></td>
+    <td data-label="Tanggal"><input type="text" class="tanggal" value="${data.tanggal || '28-02-26'}"></td>
+    <td data-label="Nama"><input type="text" class="nama" value="${data.nama || ''}"></td>
+    <td data-label="Nomor HP"><input type="tel" class="hp" value="${data.hp || ''}"></td>
+    <td data-label="Pax"><input type="number" min="1" class="pax" value="${data.pax || ''}"></td>
+    <td data-label="No Meja"><select class="meja">${createMejaOptions(data.meja)}</select></td>
+    <td data-label="DP / Lunas">
+      <select class="status">
+        <option value="DP"    ${data.status === 'DP'    ? 'selected' : ''}>DP</option>
+        <option value="Lunas" ${data.status === 'Lunas' ? 'selected' : ''}>Lunas</option>
+      </select>
+    </td>
+    <td data-label="Nominal" class="nominal">
+      <input type="number" class="nominal-input" value="${data.nominal || ''}" min="0" step="1000">
+    </td>
+    <td data-label="Aksi" class="action-cell">
+      <button class="add-meja primary" onclick="tambahMejaUntukBarisIni(this)">+ Meja</button>
+      <button class="delete danger" onclick="deleteRow(this)">Hapus</button>
+    </td>
+  `;
+
+  tbody.appendChild(tr);
+
+  tr.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', refreshAll);
+    el.addEventListener('change', refreshAll);
+  });
+
+  refreshAll();
+}
+
+function deleteRow(btn) {
+  if (confirm("Hapus baris ini?")) {
+    btn.closest('tr').remove();
+    refreshAll();
+  }
+}
+
+function hapusTerpilih() {
+  const checked = document.querySelectorAll('input.row-check:checked');
+  if (!checked.length) return;
+  if (!confirm(`Hapus ${checked.length} baris terpilih?`)) return;
+
+  checked.forEach(cb => cb.closest('tr').remove());
+  document.getElementById('selectAll').checked = false;
+  refreshAll();
+}
+
+function tambahMejaUntukBarisIni(btn) {
+  const row = btn.closest('tr');
+  const data = {
+    tanggal: row.querySelector('.tanggal').value,
+    nama:    row.querySelector('.nama').value.trim(),
+    hp:      row.querySelector('.hp').value.trim(),
+    pax:     row.querySelector('.pax').value,
+    status:  row.querySelector('.status').value,
+    nominal: row.querySelector('.nominal-input').value
+  };
+
+  if (!data.nama || !data.hp) {
+    alert("Nama dan Nomor HP harus diisi terlebih dahulu.");
+    return;
+  }
+
+  const input = prompt("Nomor meja (pisah koma atau range):\nContoh: 5,6,8 atau 12-15", "");
+  if (!input?.trim()) return;
+
+  const requested = parseMejaRangeOrList(input);
+  if (!requested.length) {
+    alert("Tidak ada nomor meja valid.");
+    return;
+  }
+
+  const booked = getBookedMejaSet();
+  const added = [];
+  const skipped = [];
+
+  requested.forEach(n => {
+    const s = String(n);
+    if (booked.has(s)) {
+      skipped.push(n);
+    } else if (n >= 1 && n <= JUMLAH_MEJA) {
+      addRow({ ...data, meja: s });
+      added.push(n);
+    }
+  });
+
+  let msg = added.length ? `Berhasil tambah ${added.length} meja: ${added.join(', ')}\n` : '';
+  if (skipped.length) msg += `Sudah terpakai: ${skipped.join(', ')}`;
+
+  if (msg) alert(msg.trim());
+  refreshAll();
+}
+
+function clearAllData() {
+  if (!confirm("Hapus SEMUA data reservasi?")) return;
+  localStorage.removeItem(DATA_KEY);
+  document.getElementById('tableBody').innerHTML = '';
+  document.getElementById('selectAll').checked = false;
+  refreshAll();
+}
+
+// ────────────────────────────────────────────────
+// INIT – fixed order: config first, then load data
+// ────────────────────────────────────────────────
+window.onload = () => {
+  const savedData = loadData();
+  savedData.forEach(d => addRow(d));
+  initConfig();  // load name & jumlah meja first
+  refreshAll();
+};
+</script>
+</body>
+</html>
