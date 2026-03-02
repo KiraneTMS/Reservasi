@@ -4,334 +4,526 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reservasi Meja</title>
-  <style>
-    :root {
-      --primary: #27ae60;
-      --primary-dark: #219653;
-      --danger: #e74c3c;
-      --danger-dark: #c0392b;
-      --purple: #8e44ad;
-      --purple-dark: #732d91;
-      --light: #f5f5f5;
-      --dark: #2c3e50;
-      --yellow: #f1c40f;
-    }
+<style>
+  :root {
+    --primary: #27ae60;
+    --primary-dark: #219653;
+    --danger: #e74c3c;
+    --danger-dark: #c0392b;
+    --purple: #8e44ad;
+    --purple-dark: #732d91;
+    --light: #f5f5f5;
+    --dark: #2c3e50;
+    --yellow: #f1c40f;
+  }
 
-    * { box-sizing: border-box; }
+  * {
+    box-sizing: border-box;
+  }
 
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--light);
-      margin: 0;
-      padding: 16px;
-      color: #333;
-      line-height: 1.5;
-    }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--light);
+    margin: 0;
+    padding: 16px;
+    color: #333;
+    line-height: 1.5;
+  }
 
-    h1 {
-      text-align: center;
-      color: var(--dark);
-      margin: 0.6em 0 0.2em;
-      font-size: clamp(1.6rem, 6vw, 2.2rem);
-    }
+  h1 {
+    text-align: center;
+    color: var(--dark);
+    margin: 0.6em 0 0.2em;
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+  }
 
-    .subtitle {
-      text-align: center;
-      color: #777;
-      margin: 0 0 1.5rem;
-      font-size: clamp(0.95rem, 4vw, 1.1rem);
-    }
+  .subtitle {
+    text-align: center;
+    color: #777;
+    margin: 0 0 1.5rem;
+    font-size: clamp(0.95rem, 4vw, 1.1rem);
+  }
 
-    .controls {
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 1.2rem 0 1.8rem;
+  }
+
+  /* ==================== DROPDOWN GROUPING ==================== */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  padding: 10px 18px;
+  font-size: clamp(0.9rem, 3.5vw, 1rem);
+  min-height: 44px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  min-width: 220px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  z-index: 1000;
+  padding: 6px 0;
+  margin-top: 4px;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown.show .dropdown-content {
+  display: block;
+}
+
+.dropdown-content button {
+  width: 100%;
+  text-align: left;
+  padding: 12px 18px;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+  .date-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       justify-content: center;
-      margin: 1.2rem 0 1.8rem;
+      align-items: center;
+      margin: 1rem 0 1.5rem;
+      font-size: 1.05rem;
     }
 
-    button {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-size: clamp(0.9rem, 3.5vw, 1rem);
-      min-height: 44px;
-    }
-
-    button:hover { opacity: 0.92; }
-    button:active { transform: scale(0.97); }
-
-    button.primary     { background: var(--primary); }
-    button.primary:hover { background: var(--primary-dark); }
-    button.danger      { background: var(--danger); }
-    button.danger:hover { background: var(--danger-dark); }
-    button.config      { background: var(--purple); }
-    button.config:hover { background: var(--purple-dark); }
-    button.secondary   { background: #95a5a6; }
-
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    table {
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto 2rem;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    }
-
-    th, td {
-      padding: 10px 8px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-      font-size: clamp(0.9rem, 3.2vw, 1rem);
-    }
-
-    th {
-      background: var(--yellow);
-      color: var(--dark);
-      font-weight: 600;
-      text-align: center;
-    }
-
-    /* ── Wider No Meja column so 2-digit numbers are fully visible ── */
-    th:nth-child(6), td:nth-child(6) {
-      width: 140px;          /* ← made wider – enough for "16", "25", etc. */
-      min-width: 120px;
-      max-width: 180px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #d1d5db;
+    .date-controls input[type="date"] {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 1rem;
-      min-height: 40px;
     }
 
-    select.meja option:disabled {
-      background: #ffe6e6 !important;
-      color: #c62828 !important;
-      font-weight: 500;
+    .date-controls button {
+      padding: 8px 14px;
+      font-size: 1rem;
     }
 
-    .lunas { background-color: #e8f5e9 !important; }
-    .dp    { background-color: #fff3cd !important; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 1.2rem 0 1.8rem; }
 
-    .nominal input {
-      text-align: right;
-      font-weight: 600;
+  button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    min-height: 44px;
+  }
+
+  button:hover { opacity: 0.92; }
+  button:active { transform: scale(0.97); }
+
+  button.primary     { background: var(--primary); }
+  button.primary:hover { background: var(--primary-dark); }
+  button.danger      { background: var(--danger); }
+  button.danger:hover { background: var(--danger-dark); }
+  button.config      { background: var(--purple); }
+  button.config:hover { background: var(--purple-dark); }
+  button.secondary   { background: #95a5a6; }
+
+  button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  table {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 2rem;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  th, td {
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: clamp(0.9rem, 3.2vw, 1rem);
+  }
+
+  th {
+    background: var(--yellow);
+    color: var(--dark);
+    font-weight: 600;
+    text-align: center;
+  }
+
+
+/* Make other columns narrower overall */
+th:nth-child(2), td:nth-child(2),   /* Tanggal */
+th:nth-child(3), td:nth-child(3),   /* Nama */
+th:nth-child(4), td:nth-child(4),   /* Nomor HP */
+th:nth-child(5), td:nth-child(5),   /* Pax */
+th:nth-child(8), td:nth-child(8) {  /* Nominal */
+  width: auto;
+  min-width: unset;
+}
+
+/* Specifically make these even narrower */
+th:nth-child(2), td:nth-child(2),   /* Tanggal */
+th:nth-child(5), td:nth-child(5),   /* Pax */
+th:nth-child(8), td:nth-child(8) {  /* Nominal */
+  width: 10%;                     /* ← very narrow */
+  min-width: 90px;
+  max-width: 130px;
+}
+
+th:nth-child(3), td:nth-child(3) {  /* Nama */
+  width: 16%;
+  min-width: 130px;
+  max-width: 200px;
+}
+
+th:nth-child(4), td:nth-child(4) {  /* Nomor HP */
+  width: 14%;
+  min-width: 120px;
+  max-width: 180px;
+}
+
+/* Make sure inputs inside narrow columns don't overflow */
+td input,
+td select {
+  width: 100%;
+  min-width: 0;                   /* important: allow shrinking */
+}
+
+/* Optional: better text alignment in narrow columns */
+td:nth-child(2) input,              /* Tanggal */
+td:nth-child(5) input,              /* Pax */
+td:nth-child(8) input {             /* Nominal */
+  text-align: center;
+}
+
+  /* ── Multi-select meja tags styling ── */
+.multi-meja-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.selected-meja-tags {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* exactly 3 columns */
+  gap: 10px 12px;                          /* row-gap 10px, column-gap 12px */
+  width: 100%;
+}
+
+  .meja-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e8f0fe;
+    color: #1e40af;
+    font-size: 0.92rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid #c5d6ff;
+    transition: all 0.13s ease;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .meja-tag:hover {
+    background: #dbe9ff;
+    border-color: #a5c1ff;
+    transform: translateY(-1px);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .meja-tag .remove {
+    background: none;
+    color: #ef4444;
+    font-size: 1.18rem;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border: none;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.14s ease;
+  }
+
+  .meja-tag .remove:hover {
+    color: #dc2626;
+    background: rgba(239,68,68,0.15);
+    transform: scale(1.18);
+  }
+
+  .selected-meja-tags:empty::before {
+    content: "Belum ada meja dipilih";
+    color: #9ca3af;
+    font-style: italic;
+    font-size: 0.9rem;
+    padding: 0 4px;
+  }
+
+  .add-meja-btn.small {
+    padding: 6px 14px;
+    font-size: 0.86rem;
+    min-height: 34px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .nominal input {
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .action-cell {
+    white-space: nowrap;
+    text-align: center;
+    padding: 8px 4px !important;
+  }
+
+  .action-cell button {
+    margin: 2px;
+    padding: 6px 10px;
+    font-size: 0.88rem;
+    min-width: 68px;
+  }
+
+  .check-col {
+    width: 44px;
+    text-align: center;
+  }
+
+  #meja-summary {
+    margin: 2rem auto;
+    padding: 1.2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    max-width: 100%;
+  }
+
+  #meja-summary h2 {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+  }
+
+  .meja-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 10px;
+    padding: 8px;
+  }
+
+  .meja-box {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    transition: transform 0.15s;
+  }
+
+  .meja-box:hover { transform: scale(1.06); }
+
+  .meja-box.tersedia {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #a5d6a7;
+  }
+
+  .meja-box.dipesan {
+    background: #ffebee;
+    color: #c62828;
+    border: 2px solid #ef9a9a;
+  }
+
+  .meja-box span.number {
+    font-size: clamp(1.4rem, 6vw, 1.9rem);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .meja-box span {
+    font-size: 0.82rem;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* ── MOBILE RESPONSIVE CARD LAYOUT FOR TABLE ── */
+  @media (max-width: 768px) {
+    #rsvTable thead { display: none; }
+    #rsvTable, #rsvTable tbody, #rsvTable tr, #rsvTable td {
+      display: block;
+      width: 100%;
     }
-
-    .action-cell {
-      white-space: nowrap;
-      text-align: center;
-      padding: 8px 4px !important;
-    }
-
-    .action-cell button {
-      margin: 2px;
-      padding: 6px 10px;
-      font-size: 0.88rem;
-      min-width: 68px;
-    }
-
-    .check-col {
-      width: 44px;
-      text-align: center;
-    }
-
-    #meja-summary {
-      margin: 2rem auto;
-      padding: 1.2rem;
+    #rsvTable tr {
       background: white;
+      margin-bottom: 1.5rem;
       border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      max-width: 100%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 12px;
+      border: 1px solid #e5e7eb;
     }
-
-    #meja-summary h2 {
-      margin: 0 0 1rem;
-      text-align: center;
-      font-size: clamp(1.2rem, 5vw, 1.5rem);
-    }
-
-    .meja-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
-      gap: 10px;
-      padding: 8px;
-    }
-
-    .meja-box {
-      aspect-ratio: 1 / 1;
+    #rsvTable td {
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: space-between;
+      padding: 8px 4px;
+      border-bottom: 1px solid #f3f4f6;
+      text-align: right;
+    }
+    #rsvTable td:last-child { border-bottom: none; }
+    #rsvTable td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: var(--dark);
+      flex-basis: 40%;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    #rsvTable td input,
+    #rsvTable td select {
+      flex: 1;
+      width: 100%;
+      max-width: 60%;
+      margin-left: 10px;
+      text-align: left;
+    }
+    #rsvTable td.check-col::before { content: "Pilih"; }
+    #rsvTable td.check-col {
+      background: #fdfdfd;
+      border-radius: 6px 6px 0 0;
       justify-content: center;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: clamp(0.9rem, 3.5vw, 1rem);
-      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-      transition: transform 0.15s;
+    }
+    #rsvTable td.check-col input {
+      width: 24px;
+      height: 24px;
+      flex-grow: 0;
+      margin: 0;
+    }
+    #rsvTable td.action-cell {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding-top: 12px;
+    }
+    #rsvTable td.action-cell::before { display: none; }
+    #rsvTable td.action-cell button { width: 100%; margin: 0; }
+
+    .multi-meja-container {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
     }
 
-    .meja-box:hover { transform: scale(1.06); }
-
-    .meja-box.tersedia {
-      background: #e8f5e9;
-      color: #2e7d32;
-      border: 2px solid #a5d6a7;
+    .selected-meja-tags {
+      max-width: none;
     }
 
-    .meja-box.dipesan {
-      background: #ffebee;
-      color: #c62828;
-      border: 2px solid #ef9a9a;
+    .add-meja-btn.small {
+      width: 100%;
     }
+  }
 
-    .meja-box span.number {
-      font-size: clamp(1.4rem, 6vw, 1.9rem);
-      line-height: 1;
-      margin-bottom: 4px;
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    button { width: 100%; padding: 12px 16px; font-size: 1.05rem; }
+    .meja-grid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
+    .meja-box span.number { font-size: clamp(1.2rem, 5.5vw, 1.6rem); }
+  }
+
+  @media (max-width: 480px) {
+    .meja-tag {
+      font-size: 0.88rem;
+      padding: 5px 10px;
     }
-
-    .meja-box span {
-      font-size: 0.82rem;
-      text-align: center;
-      line-height: 1.2;
+    .meja-tag .remove {
+      font-size: 1.05rem;
+      width: 18px;
+      height: 18px;
     }
-
-    /* ── MOBILE RESPONSIVE CARD LAYOUT FOR TABLE ── */
-    @media (max-width: 768px) {
-      /* Hide standard table headers */
-      #rsvTable thead {
-        display: none;
-      }
-
-      /* Remove table structure */
-      #rsvTable, #rsvTable tbody, #rsvTable tr, #rsvTable td {
-        display: block;
-        width: 100%;
-      }
-
-      /* Style rows as floating cards */
-      #rsvTable tr {
-        background: white;
-        margin-bottom: 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        padding: 12px;
-        border: 1px solid #e5e7eb;
-      }
-
-      /* Style cells to sit side-by-side with labels */
-      #rsvTable td {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 8px 4px;
-        border-bottom: 1px solid #f3f4f6;
-        text-align: right;
-      }
-
-      #rsvTable td:last-child {
-        border-bottom: none;
-      }
-
-      /* Use data-label attribute to create mobile headers */
-      #rsvTable td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: var(--dark);
-        flex-basis: 40%;
-        text-align: left;
-        font-size: 0.95rem;
-      }
-
-      /* Adjust inputs for smaller width */
-      #rsvTable td input,
-      #rsvTable td select {
-        flex: 1;
-        width: 100%;
-        max-width: 60%;
-        margin-left: 10px;
-        text-align: left;
-      }
-
-      /* Custom overrides for Checkbox */
-      #rsvTable td.check-col::before {
-        content: "Pilih";
-      }
-      #rsvTable td.check-col {
-        background: #fdfdfd;
-        border-radius: 6px 6px 0 0;
-        justify-content: center;
-      }
-      #rsvTable td.check-col input {
-        width: 24px;
-        height: 24px;
-        flex-grow: 0;
-        margin: 0;
-      }
-
-      /* Action buttons */
-      #rsvTable td.action-cell {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        padding-top: 12px;
-      }
-      #rsvTable td.action-cell::before {
-        display: none;
-      }
-      #rsvTable td.action-cell button {
-        width: 100%;
-        margin: 0;
-      }
-
-      /* No Meja full width on mobile (card layout needs it) */
-      th:nth-child(6), td:nth-child(6) {
-        width: 100%;
-        max-width: 100%;
-      }
-    }
-
-    /* Extra small screen tweaks */
-    @media (max-width: 640px) {
-      body { padding: 12px; }
-      .controls { flex-direction: column; align-items: stretch; }
-      button { width: 100%; padding: 12px 16px; font-size: 1.05rem; }
-      .meja-grid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
-      .meja-box span.number { font-size: clamp(1.2rem, 5.5vw, 1.6rem); }
-    }
-
-    @media (max-width: 480px) {
-      .meja-grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
 <h1 id="storeTitle">Reservasi Meja</h1>
 <p class="subtitle" id="subtitle">Memuat konfigurasi...</p>
 
-<div class="controls">
+<div class="date-controls">
+  <button class="secondary" onclick="changeDate(-1)">◀ Kemarin</button>
+  <input type="date" id="datePicker" onchange="changeDate(0)">
+  <button class="secondary" onclick="changeDate(1)">Besok ▶</button>
+</div>
+
+<div class="controls" style="gap: 10px; justify-content: center; flex-wrap: wrap;">
+
+  <!-- Reservasi -->
   <button class="primary" onclick="addRow()">+ Reservasi Baru</button>
+
+  <!-- Hapus Data -->
   <button class="danger" id="bulkDeleteBtn" onclick="hapusTerpilih()" disabled>Hapus Terpilih</button>
-  <button class="config" onclick="konfigurasiUlang()">Konfigurasi Nama & Jumlah Meja</button>
-  <button class="secondary" onclick="clearAllData()">Reset Semua Data</button>
+
+  <!-- Pengaturan (dropdown) -->
+  <div class="dropdown">
+    <button class="config dropbtn">Pengaturan ▼</button>
+    <div class="dropdown-content">
+      <button onclick="konfigurasiUlang()">Konfigurasi Nama & Jumlah Meja</button>
+      <button onclick="clearAllData()">Reset Semua Data</button>
+    </div>
+  </div>
+
+  <!-- Data Management (dropdown) -->
+  <div class="dropdown">
+    <button class="config dropbtn">Manajemen Data ▼</button>
+    <div class="dropdown-content">
+      <button onclick="exportData()">Ekspor Data (JSON)</button>
+      <button onclick="importData()">Impor Data (JSON)</button>
+    </div>
+  </div>
+
+  <!-- Ekspor Excel (dropdown) -->
+  <div class="dropdown">
+    <button class="primary dropbtn">Ekspor Excel ▼</button>
+    <div class="dropdown-content">
+      <button onclick="exportExcelDaily()">Hari Ini saja</button>
+      <button onclick="exportExcelAll()">Semua Tanggal</button>
+    </div>
+  </div>
+
 </div>
 
 <table id="rsvTable">
@@ -352,19 +544,248 @@
 </table>
 
 <div id="meja-summary">
-  <h2>Status Semua Meja</h2>
+  <h2>Status Semua Meja – <span id="currentDateDisplay"></span></h2>
   <div class="meja-grid" id="mejaGrid"></div>
 </div>
 
 <script>
 // ────────────────────────────────────────────────
+// Dropdown
+// ────────────────────────────────────────────────
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.matches('.dropbtn')) {
+    document.querySelectorAll('.dropdown').forEach(d => {
+      d.classList.remove('show');
+    });
+  }
+});
+
+// Toggle dropdown on click (for better mobile experience)
+document.querySelectorAll('.dropdown').forEach(dropdown => {
+  const btn = dropdown.querySelector('.dropbtn');
+  btn.addEventListener('click', function(e) {
+    e.stopImmediatePropagation();
+    
+    // Close all other dropdowns first
+    document.querySelectorAll('.dropdown').forEach(d => {
+      if (d !== dropdown) d.classList.remove('show');
+    });
+    
+    dropdown.classList.toggle('show');
+  });
+});
+// ────────────────────────────────────────────────
+// EXPORT TO EXCEL (using SheetJS)
+// ────────────────────────────────────────────────
+
+function exportExcelDaily() {
+  const rows = getDataForDate(currentDate);
+  if (rows.length === 0) {
+    alert("Tidak ada reservasi untuk tanggal ini.");
+    return;
+  }
+
+  // Prepare data with headers (same order as your table)
+  const data = [
+    ["Tanggal", "Nama", "Nomor HP", "Pax", "No Meja", "DP / Lunas", "Nominal"],
+    ...rows.map(r => [
+      r.tanggal || currentDate,
+      r.nama || "",
+      r.hp || "",
+      r.pax || "",
+      r.meja || "",
+      r.status || "DP",
+      r.nominal ? Number(r.nominal) : 0
+    ])
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  
+  // Auto-width columns (optional but nice)
+  ws['!cols'] = [
+    { wch: 12 },   // Tanggal
+    { wch: 20 },   // Nama
+    { wch: 15 },   // HP
+    { wch: 8  },   // Pax
+    { wch: 18 },   // No Meja
+    { wch: 10 },   // Status
+    { wch: 14 }    // Nominal
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, currentDate);
+
+  const filename = `reservasi-${getSafeStoreName()}-${currentDate}.xlsx`;
+  XLSX.writeFile(wb, filename);
+
+  alert(`Data hari ini (${currentDate}) telah diekspor ke Excel!`);
+}
+
+function exportExcelAll() {
+  const allData = loadAllData();
+  const allDates = Object.keys(allData);
+
+  if (allDates.length === 0) {
+    alert("Belum ada data reservasi sama sekali.");
+    return;
+  }
+
+  let totalRows = 0;
+  allDates.forEach(date => { totalRows += allData[date].length; });
+
+  if (totalRows === 0) {
+    alert("Semua tanggal kosong.");
+    return;
+  }
+
+  // Flat list format
+  const headers = [
+    "Tanggal", "Nama", "Nomor HP", "Pax", "No Meja", "DP / Lunas", "Nominal"
+  ];
+
+  const data = [headers];
+
+  allDates.sort().forEach(date => {
+    allData[date].forEach(r => {
+      data.push([
+        date,
+        r.nama || "",
+        r.hp || "",
+        r.pax || "",
+        r.meja || "",
+        r.status || "DP",
+        r.nominal ? Number(r.nominal) : 0
+      ]);
+    });
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+
+  // Optional: wider columns for long lists
+  ws['!cols'] = [
+    { wch: 12 },
+    { wch: 22 },
+    { wch: 16 },
+    { wch: 8  },
+    { wch: 20 },
+    { wch: 10 },
+    { wch: 14 }
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Semua Reservasi");
+
+  const filename = `reservasi-SEMUA-${getSafeStoreName()}-${getTodayFormatted()}.xlsx`;
+  XLSX.writeFile(wb, filename);
+
+  alert(`Semua data (${totalRows} baris) telah diekspor ke Excel!`);
+}
+// ────────────────────────────────────────────────
+// EXPORT / IMPORT JSON
+// ────────────────────────────────────────────────
+// Helper - supaya nama file lebih rapi
+function getSafeStoreName() {
+  return (STORE_NAME || "reservasi")
+    .replace(/[^a-z0-9]/gi, '-')
+    .replace(/-+/g, '-')
+    .toLowerCase();
+}
+function exportData() {
+  const allData = loadAllData();           // ambil semua reservasi semua tanggal
+  const config  = {
+    name: STORE_NAME,
+    tables: JUMLAH_MEJA
+  };
+
+  const exportPayload = {
+    config: config,
+    reservations: allData,
+    exportedAt: new Date().toISOString(),
+    version: "1.0"   // supaya future-proof
+  };
+
+  const jsonString = JSON.stringify(exportPayload, null, 2);
+  const blob = new Blob([jsonString], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `reservasi-${getSafeStoreName()}-${getTodayFormatted()}.json`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+  alert("Data berhasil diekspor!\nSimpan file JSON ini dengan baik.");
+}
+
+function importData() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = event => {
+      try {
+        const data = JSON.parse(event.target.result);
+
+        // Basic validation
+        if (!data.reservations || typeof data.reservations !== "object") {
+          throw new Error("Format file tidak valid (tidak ada field 'reservations')");
+        }
+
+        // Restore config (optional - tanya dulu)
+        if (data.config) {
+          if (confirm(`Update nama toko menjadi "${data.config.name}" dan jumlah meja menjadi ${data.config.tables}?`)) {
+            STORE_NAME = data.config.name;
+            JUMLAH_MEJA = Number(data.config.tables);
+            saveConfig();
+          }
+        }
+
+        // Restore semua data reservasi
+        saveAllData(data.reservations);
+
+        alert("Data berhasil diimpor!\nSilakan refresh halaman atau ganti tanggal untuk melihat hasilnya.");
+
+        // Refresh tampilan saat ini
+        updateDisplay();
+        loadAndRenderCurrentDate();
+
+      } catch (err) {
+        alert("Gagal membaca file JSON:\n" + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  input.click();
+}
+// ────────────────────────────────────────────────
 // CONFIG & STORAGE
 // ────────────────────────────────────────────────
 const CONFIG_KEY = "reservasi-config";
-const DATA_KEY   = "reservasi-data";
+const DATA_KEY   = "reservasi-data-by-date";
 
 let JUMLAH_MEJA = 25;
 let STORE_NAME  = "Reservasi Meja";
+let currentDate = getTodayFormatted(); // format DD-MM-YY
+
+function getTodayFormatted() {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2,'0');
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const yy = String(now.getFullYear()).slice(-2);
+  return `${dd}-${mm}-${yy}`;
+}
+
+function formatDateToKey(dateStr) { // menerima YYYY-MM-DD → DD-MM-YY
+  if (!dateStr) return currentDate;
+  const [yyyy, mm, dd] = dateStr.split('-');
+  return `${dd}-${mm}-${yyyy.slice(-2)}`;
+}
 
 function loadConfig() {
   const saved = localStorage.getItem(CONFIG_KEY);
@@ -382,9 +803,85 @@ function saveConfig() {
   }));
 }
 
+function loadAllData() {
+  const saved = localStorage.getItem(DATA_KEY);
+  return saved ? JSON.parse(saved) : {};
+}
+
+function saveAllData(allData) {
+  localStorage.setItem(DATA_KEY, JSON.stringify(allData));
+}
+
+function getDataForDate(dateKey) {
+  const all = loadAllData();
+  return all[dateKey] || [];
+}
+
+function saveDataForDate(dateKey, rows) {
+  const all = loadAllData();
+  all[dateKey] = rows;
+  saveAllData(all);
+}
+
+// ── Add this helper to convert YYYY-MM-DD → DD-MM-YY ──
+function datePickerToKey(pickerValue) {
+  if (!pickerValue) return currentDate;
+  const [yyyy, mm, dd] = pickerValue.split('-');
+  const yy = yyyy.slice(-2);
+  return `${dd}-${mm}-${yy}`;
+}
+
+// ── Modified: now supports both offset and direct picker change ──
+function changeDate(offset) {
+  const picker = document.getElementById("datePicker");
+  
+  if (offset === 0) {
+    // Direct selection from calendar
+    if (picker.value) {
+      currentDate = datePickerToKey(picker.value);
+    }
+    // else: invalid/empty → keep current
+  } else {
+    // Arrow buttons (offset ±1)
+    let [dd, mm, yy] = currentDate.split('-').map(Number);
+    const dateObj = new Date(2000 + yy, mm - 1, dd);
+    dateObj.setDate(dateObj.getDate() + offset);
+    
+    dd = String(dateObj.getDate()).padStart(2, '0');
+    mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+    yy = String(dateObj.getFullYear()).slice(-2);
+    
+    currentDate = `${dd}-${mm}-${yy}`;
+    
+    // Also sync the picker input
+    const fullYear = "20" + yy;
+    picker.value = `${fullYear}-${mm}-${dd}`;
+  }
+
+  updateDisplay();
+}
+
 function updateDisplay() {
   document.getElementById("storeTitle").textContent = STORE_NAME;
   document.getElementById("subtitle").textContent = `Total Meja: ${JUMLAH_MEJA}`;
+  document.getElementById("currentDateDisplay").textContent = currentDate;
+
+  // Sync date picker (YYYY-MM-DD format)
+  const [dd, mm, yy] = currentDate.split('-');
+  const fullYear = "20" + yy;               // assuming 2000–2099
+  document.getElementById("datePicker").value = `${fullYear}-${mm}-${dd}`;
+
+  loadAndRenderCurrentDate();
+}
+
+
+function loadAndRenderCurrentDate() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  const rows = getDataForDate(currentDate);
+  rows.forEach(d => addRow(d));
+
   refreshAll();
 }
 
@@ -395,25 +892,21 @@ function konfigurasiUlang() {
   let changed = false;
 
   if (namaBaru !== null && namaBaru.trim() !== STORE_NAME) {
-    STORE_NAME = namaBaru.trim();
-    changed = true;
+    STORE_NAME = namaBaru.trim(); changed = true;
   }
 
   if (jmlBaruStr !== null) {
     const jml = Number(jmlBaruStr);
     if (!Number.isNaN(jml) && jml !== JUMLAH_MEJA && jml >= 1 && jml <= 500) {
-      if (jml < JUMLAH_MEJA && !confirm(`Mengurangi dari ${JUMLAH_MEJA} menjadi ${jml} meja?\nMeja bernomor lebih tinggi tidak akan muncul lagi di dropdown.`)) {
-        return;
-      }
-      JUMLAH_MEJA = jml;
-      changed = true;
+      if (jml < JUMLAH_MEJA && !confirm(`Mengurangi menjadi ${jml} meja?\nMeja lebih tinggi akan hilang.`)) return;
+      JUMLAH_MEJA = jml; changed = true;
     }
   }
 
   if (changed) {
     saveConfig();
     updateDisplay();
-    alert("Konfigurasi berhasil diperbarui.");
+    alert("Konfigurasi diperbarui.");
   }
 }
 
@@ -422,44 +915,25 @@ function initConfig() {
   if (!localStorage.getItem(CONFIG_KEY)) {
     const nama = prompt("Nama toko / event:", "Cimahi RSV Ramadhan 2026");
     const jml  = prompt("Jumlah meja:", "25");
-
     if (nama?.trim()) STORE_NAME = nama.trim();
     const parsed = Number(jml);
-    if (!Number.isNaN(parsed)) {
-      JUMLAH_MEJA = Math.max(1, Math.min(500, parsed));
-    }
+    if (!Number.isNaN(parsed)) JUMLAH_MEJA = Math.max(1, Math.min(500, parsed));
     saveConfig();
   }
   updateDisplay();
 }
 
 // ────────────────────────────────────────────────
-// DATA & MEJA LOGIC
+// DATA & MEJA LOGIC (sama seperti sebelumnya, tapi disesuaikan)
 // ────────────────────────────────────────────────
-function loadData() {
-  const saved = localStorage.getItem(DATA_KEY);
-  return saved ? JSON.parse(saved) : [];
-}
-
-function saveData() {
-  const rows = [];
-  document.querySelectorAll('#tableBody tr').forEach(tr => {
-    rows.push({
-      tanggal: tr.querySelector('.tanggal').value,
-      nama:    tr.querySelector('.nama').value,
-      hp:      tr.querySelector('.hp').value,
-      pax:     tr.querySelector('.pax').value,
-      meja:    tr.querySelector('.meja').value,
-      status:  tr.querySelector('.status').value,
-      nominal: tr.querySelector('.nominal-input').value
-    });
-  });
-  localStorage.setItem(DATA_KEY, JSON.stringify(rows));
-}
 
 function getBookedMejaSet() {
   const set = new Set();
-  document.querySelectorAll('.meja').forEach(s => s.value && set.add(s.value));
+  document.querySelectorAll('.meja-hidden').forEach(hidden => {
+    if (hidden.value) {
+      hidden.value.split(',').map(n => n.trim()).forEach(n => { if (n) set.add(n); });
+    }
+  });
   return set;
 }
 
@@ -480,22 +954,35 @@ function parseMejaRangeOrList(input) {
   return [...new Set(result)].sort((a,b)=>a-b);
 }
 
-function createMejaOptions(selected = "") {
+function renderMejaTags(container, selectedValue = "") {
   const booked = getBookedMejaSet();
-  let html = '<option value="">—</option>';
-  for (let i = 1; i <= JUMLAH_MEJA; i++) {
-    const val = String(i);
-    const disabled = booked.has(val) && val !== selected;
-    html += `<option value="${i}" ${val === selected ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${i}</option>`;
-  }
-  return html;
+  const selected = selectedValue.split(',').map(n => n.trim()).filter(Boolean);
+
+  let html = '';
+  selected.forEach(num => {
+    html += `
+      <span class="meja-tag">
+        ${num}
+        <button type="button" class="remove" data-num="${num}">×</button>
+      </span>
+    `;
+  });
+
+  container.innerHTML = html || '<span style="color:#999; font-style:italic; font-size:0.9rem;">Belum ada meja dipilih</span>';
+
+  container.querySelectorAll('.remove').forEach(btn => {
+    btn.onclick = () => {
+      const num = btn.dataset.num;
+      const hidden = container.closest('.multi-meja-cell').querySelector('.meja-hidden');
+      let vals = hidden.value.split(',').map(n => n.trim()).filter(n => n !== num);
+      hidden.value = vals.join(',');
+      renderMejaTags(container, hidden.value);
+      refreshAll();
+    };
+  });
 }
 
 function refreshAll() {
-  document.querySelectorAll('.meja').forEach(sel => {
-    sel.innerHTML = createMejaOptions(sel.value);
-  });
-
   const booked = getBookedMejaSet();
   const grid = document.getElementById('mejaGrid');
   grid.innerHTML = '';
@@ -506,8 +993,29 @@ function refreshAll() {
     grid.appendChild(div);
   }
 
+  document.querySelectorAll('.selected-meja-tags').forEach(cont => {
+    const hidden = cont.closest('.multi-meja-cell').querySelector('.meja-hidden');
+    renderMejaTags(cont, hidden.value);
+  });
+
   updateBulkDeleteButton();
-  saveData();
+  saveCurrentDateData();
+}
+
+function saveCurrentDateData() {
+  const rows = [];
+  document.querySelectorAll('#tableBody tr').forEach(tr => {
+    rows.push({
+      tanggal: currentDate, // selalu simpan tanggal aktif
+      nama:    tr.querySelector('.nama').value,
+      hp:      tr.querySelector('.hp').value,
+      pax:     tr.querySelector('.pax').value,
+      meja:    tr.querySelector('.meja-hidden').value,
+      status:  tr.querySelector('.status').value,
+      nominal: tr.querySelector('.nominal-input').value
+    });
+  });
+  saveDataForDate(currentDate, rows);
 }
 
 function updateBulkDeleteButton() {
@@ -524,13 +1032,22 @@ function addRow(data = {}) {
   const tbody = document.getElementById('tableBody');
   const tr = document.createElement('tr');
 
+  // Jika data.tanggal ada → pakai itu, tapi default pakai currentDate
+  const displayTanggal = data.tanggal || currentDate;
+
   tr.innerHTML = `
     <td class="check-col" data-label="Pilih"><input type="checkbox" class="row-check" onchange="updateBulkDeleteButton()"></td>
-    <td data-label="Tanggal"><input type="text" class="tanggal" value="${data.tanggal || '28-02-26'}"></td>
+    <td data-label="Tanggal"><input type="text" class="tanggal" value="${displayTanggal}" readonly style="background:#f0f0f0;"></td>
     <td data-label="Nama"><input type="text" class="nama" value="${data.nama || ''}"></td>
     <td data-label="Nomor HP"><input type="tel" class="hp" value="${data.hp || ''}"></td>
     <td data-label="Pax"><input type="number" min="1" class="pax" value="${data.pax || ''}"></td>
-    <td data-label="No Meja"><select class="meja">${createMejaOptions(data.meja)}</select></td>
+    <td data-label="No Meja" class="multi-meja-cell">
+      <div class="multi-meja-container">
+        <div class="selected-meja-tags"></div>
+        <input type="hidden" class="meja-hidden" value="${data.meja || ''}">
+        <button type="button" class="add-meja-btn small primary">+ Pilih Meja</button>
+      </div>
+    </td>
     <td data-label="DP / Lunas">
       <select class="status">
         <option value="DP"    ${data.status === 'DP'    ? 'selected' : ''}>DP</option>
@@ -541,14 +1058,50 @@ function addRow(data = {}) {
       <input type="number" class="nominal-input" value="${data.nominal || ''}" min="0" step="1000">
     </td>
     <td data-label="Aksi" class="action-cell">
-      <button class="add-meja primary" onclick="tambahMejaUntukBarisIni(this)">+ Meja</button>
       <button class="delete danger" onclick="deleteRow(this)">Hapus</button>
     </td>
   `;
 
   tbody.appendChild(tr);
 
-  tr.querySelectorAll('input, select').forEach(el => {
+  const tagContainer = tr.querySelector('.selected-meja-tags');
+  const hiddenInput  = tr.querySelector('.meja-hidden');
+  renderMejaTags(tagContainer, hiddenInput.value);
+
+  tr.querySelector('.add-meja-btn').onclick = () => {
+    const input = prompt("Masukkan nomor meja (pisah koma atau range):\nContoh: 3,5-8,12", "");
+    if (!input?.trim()) return;
+
+    const requested = parseMejaRangeOrList(input);
+    if (!requested.length) { alert("Tidak ada nomor valid."); return; }
+
+    const booked = getBookedMejaSet();
+    let current = hiddenInput.value ? hiddenInput.value.split(',').map(n=>n.trim()).filter(Boolean) : [];
+    const added = [];
+    const skipped = [];
+
+    requested.forEach(n => {
+      const s = String(n);
+      if (booked.has(s) && !current.includes(s)) {
+        skipped.push(n);
+      } else if (n >= 1 && n <= JUMLAH_MEJA && !current.includes(s)) {
+        current.push(s);
+        added.push(n);
+      }
+    });
+
+    current = [...new Set(current)].sort((a,b)=>Number(a)-Number(b));
+    hiddenInput.value = current.join(',');
+    renderMejaTags(tagContainer, hiddenInput.value);
+
+    let msg = added.length ? `Ditambahkan: ${added.join(', ')}\n` : '';
+    if (skipped.length) msg += `Sudah terpakai: ${skipped.join(', ')}`;
+    if (msg) alert(msg.trim());
+
+    refreshAll();
+  };
+
+  tr.querySelectorAll('input:not(.meja-hidden,.tanggal), select').forEach(el => {
     el.addEventListener('input', refreshAll);
     el.addEventListener('change', refreshAll);
   });
@@ -566,61 +1119,15 @@ function deleteRow(btn) {
 function hapusTerpilih() {
   const checked = document.querySelectorAll('input.row-check:checked');
   if (!checked.length) return;
-  if (!confirm(`Hapus ${checked.length} baris terpilih?`)) return;
+  if (!confirm(`Hapus ${checked.length} baris?`)) return;
 
   checked.forEach(cb => cb.closest('tr').remove());
   document.getElementById('selectAll').checked = false;
   refreshAll();
 }
 
-function tambahMejaUntukBarisIni(btn) {
-  const row = btn.closest('tr');
-  const data = {
-    tanggal: row.querySelector('.tanggal').value,
-    nama:    row.querySelector('.nama').value.trim(),
-    hp:      row.querySelector('.hp').value.trim(),
-    pax:     row.querySelector('.pax').value,
-    status:  row.querySelector('.status').value,
-    nominal: row.querySelector('.nominal-input').value
-  };
-
-  if (!data.nama || !data.hp) {
-    alert("Nama dan Nomor HP harus diisi terlebih dahulu.");
-    return;
-  }
-
-  const input = prompt("Nomor meja (pisah koma atau range):\nContoh: 5,6,8 atau 12-15", "");
-  if (!input?.trim()) return;
-
-  const requested = parseMejaRangeOrList(input);
-  if (!requested.length) {
-    alert("Tidak ada nomor meja valid.");
-    return;
-  }
-
-  const booked = getBookedMejaSet();
-  const added = [];
-  const skipped = [];
-
-  requested.forEach(n => {
-    const s = String(n);
-    if (booked.has(s)) {
-      skipped.push(n);
-    } else if (n >= 1 && n <= JUMLAH_MEJA) {
-      addRow({ ...data, meja: s });
-      added.push(n);
-    }
-  });
-
-  let msg = added.length ? `Berhasil tambah ${added.length} meja: ${added.join(', ')}\n` : '';
-  if (skipped.length) msg += `Sudah terpakai: ${skipped.join(', ')}`;
-
-  if (msg) alert(msg.trim());
-  refreshAll();
-}
-
 function clearAllData() {
-  if (!confirm("Hapus SEMUA data reservasi?")) return;
+  if (!confirm("Hapus SEMUA reservasi semua tanggal? Tidak bisa dibatalkan.")) return;
   localStorage.removeItem(DATA_KEY);
   document.getElementById('tableBody').innerHTML = '';
   document.getElementById('selectAll').checked = false;
@@ -628,14 +1135,14 @@ function clearAllData() {
 }
 
 // ────────────────────────────────────────────────
-// INIT – fixed order: config first, then load data
+// INIT
 // ────────────────────────────────────────────────
 window.onload = () => {
-  const savedData = loadData();
-  savedData.forEach(d => addRow(d));
-  initConfig();  // load name & jumlah meja first
-  refreshAll();
+  initConfig();
+  // Load data hari ini (atau tanggal terakhir yang dilihat bisa ditambahkan nanti)
+  loadAndRenderCurrentDate();
 };
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
