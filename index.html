@@ -17,9 +17,7 @@
     --yellow: #f1c40f;
   }
 
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   body {
     font-family: system-ui, -apple-system, sans-serif;
@@ -52,71 +50,61 @@
     margin: 1.2rem 0 1.8rem;
   }
 
-  /* ==================== DROPDOWN GROUPING ==================== */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
 
-.dropbtn {
-  padding: 10px 18px;
-  font-size: clamp(0.9rem, 3.5vw, 1rem);
-  min-height: 44px;
-}
+  .dropbtn {
+    padding: 10px 18px;
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    min-height: 44px;
+  }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  min-width: 220px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  border-radius: 8px;
-  z-index: 1000;
-  padding: 6px 0;
-  margin-top: 4px;
-}
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 220px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    z-index: 1000;
+    padding: 6px 0;
+    margin-top: 4px;
+  }
 
-.dropdown:hover .dropdown-content,
-.dropdown.show .dropdown-content {
-  display: block;
-}
+  .dropdown:hover .dropdown-content,
+  .dropdown.show .dropdown-content { display: block; }
 
-.dropdown-content button {
-  width: 100%;
-  text-align: left;
-  padding: 12px 18px;
-  background: none;
-  border: none;
-  color: #333;
-  font-size: 1rem;
-  cursor: pointer;
-}
+  .dropdown-content button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 18px;
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1rem;
+    cursor: pointer;
+  }
 
   .date-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      align-items: center;
-      margin: 1rem 0 1.5rem;
-      font-size: 1.05rem;
-    }
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0 1.5rem;
+    font-size: 1.05rem;
+  }
 
-    .date-controls input[type="date"] {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    .date-controls button {
-      padding: 8px 14px;
-      font-size: 1rem;
-    }
-
-    .controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 1.2rem 0 1.8rem; }
+  .date-controls input[type="date"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
 
   button {
     padding: 10px 18px;
@@ -172,66 +160,28 @@
     text-align: center;
   }
 
+  th:nth-child(2), td:nth-child(2) { width: 10%; min-width: 90px; max-width: 130px; }
+  th:nth-child(3), td:nth-child(3) { width: 16%; min-width: 130px; max-width: 200px; }
+  th:nth-child(4), td:nth-child(4) { width: 14%; min-width: 120px; max-width: 180px; }
+  th:nth-child(5), td:nth-child(5) { width: 10%; min-width: 90px; max-width: 130px; }
+  th:nth-child(8), td:nth-child(8) { width: 10%; min-width: 90px; max-width: 130px; }
 
-/* Make other columns narrower overall */
-th:nth-child(2), td:nth-child(2),   /* Tanggal */
-th:nth-child(3), td:nth-child(3),   /* Nama */
-th:nth-child(4), td:nth-child(4),   /* Nomor HP */
-th:nth-child(5), td:nth-child(5),   /* Pax */
-th:nth-child(8), td:nth-child(8) {  /* Nominal */
-  width: auto;
-  min-width: unset;
-}
+  td input, td select { width: 100%; min-width: 0; }
+  td:nth-child(2) input, td:nth-child(5) input, td:nth-child(8) input { text-align: center; }
 
-/* Specifically make these even narrower */
-th:nth-child(2), td:nth-child(2),   /* Tanggal */
-th:nth-child(5), td:nth-child(5),   /* Pax */
-th:nth-child(8), td:nth-child(8) {  /* Nominal */
-  width: 10%;                     /* ← very narrow */
-  min-width: 90px;
-  max-width: 130px;
-}
+  .multi-meja-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
 
-th:nth-child(3), td:nth-child(3) {  /* Nama */
-  width: 16%;
-  min-width: 130px;
-  max-width: 200px;
-}
-
-th:nth-child(4), td:nth-child(4) {  /* Nomor HP */
-  width: 14%;
-  min-width: 120px;
-  max-width: 180px;
-}
-
-/* Make sure inputs inside narrow columns don't overflow */
-td input,
-td select {
-  width: 100%;
-  min-width: 0;                   /* important: allow shrinking */
-}
-
-/* Optional: better text alignment in narrow columns */
-td:nth-child(2) input,              /* Tanggal */
-td:nth-child(5) input,              /* Pax */
-td:nth-child(8) input {             /* Nominal */
-  text-align: center;
-}
-
-  /* ── Multi-select meja tags styling ── */
-.multi-meja-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  width: 100%;
-}
-
-.selected-meja-tags {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);   /* exactly 3 columns */
-  gap: 10px 12px;                          /* row-gap 10px, column-gap 12px */
-  width: 100%;
-}
+  .selected-meja-tags {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 12px;
+    width: 100%;
+  }
 
   .meja-tag {
     display: inline-flex;
@@ -244,16 +194,7 @@ td:nth-child(8) input {             /* Nominal */
     padding: 5px 12px;
     border-radius: 999px;
     border: 1px solid #c5d6ff;
-    transition: all 0.13s ease;
     white-space: nowrap;
-    flex: 0 0 auto;
-  }
-
-  .meja-tag:hover {
-    background: #dbe9ff;
-    border-color: #a5c1ff;
-    transform: translateY(-1px);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
   }
 
   .meja-tag .remove {
@@ -265,20 +206,11 @@ td:nth-child(8) input {             /* Nominal */
     height: 20px;
     border: none;
     padding: 0;
-    margin: 0;
-    line-height: 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: all 0.14s ease;
-  }
-
-  .meja-tag .remove:hover {
-    color: #dc2626;
-    background: rgba(239,68,68,0.15);
-    transform: scale(1.18);
   }
 
   .selected-meja-tags:empty::before {
@@ -294,7 +226,6 @@ td:nth-child(8) input {             /* Nominal */
     font-size: 0.86rem;
     min-height: 34px;
     flex-shrink: 0;
-    white-space: nowrap;
   }
 
   .nominal input {
@@ -315,10 +246,7 @@ td:nth-child(8) input {             /* Nominal */
     min-width: 68px;
   }
 
-  .check-col {
-    width: 44px;
-    text-align: center;
-  }
+  .check-col { width: 44px; text-align: center; }
 
   #meja-summary {
     margin: 2rem auto;
@@ -353,6 +281,8 @@ td:nth-child(8) input {             /* Nominal */
     font-size: clamp(0.9rem, 3.5vw, 1rem);
     box-shadow: 0 1px 5px rgba(0,0,0,0.1);
     transition: transform 0.15s;
+    text-align: center;
+    padding: 6px;
   }
 
   .meja-box:hover { transform: scale(1.06); }
@@ -377,11 +307,38 @@ td:nth-child(8) input {             /* Nominal */
 
   .meja-box span {
     font-size: 0.82rem;
-    text-align: center;
     line-height: 1.2;
   }
 
-  /* ── MOBILE RESPONSIVE CARD LAYOUT FOR TABLE ── */
+  /* Floating Action Button */
+  .fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 900;
+    transition: all 0.2s;
+  }
+
+  .fab:hover {
+    background: var(--primary-dark);
+    transform: scale(1.08);
+  }
+
+  .fab:active { transform: scale(0.94); }
+
   @media (max-width: 768px) {
     #rsvTable thead { display: none; }
     #rsvTable, #rsvTable tbody, #rsvTable tr, #rsvTable td {
@@ -440,21 +397,9 @@ td:nth-child(8) input {             /* Nominal */
       padding-top: 12px;
     }
     #rsvTable td.action-cell::before { display: none; }
-    #rsvTable td.action-cell button { width: 100%; margin: 0; }
 
-    .multi-meja-container {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 10px;
-    }
-
-    .selected-meja-tags {
-      max-width: none;
-    }
-
-    .add-meja-btn.small {
-      width: 100%;
-    }
+    .multi-meja-container { flex-direction: column; gap: 10px; }
+    .add-meja-btn.small { width: 100%; }
   }
 
   @media (max-width: 640px) {
@@ -463,17 +408,12 @@ td:nth-child(8) input {             /* Nominal */
     button { width: 100%; padding: 12px 16px; font-size: 1.05rem; }
     .meja-grid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
     .meja-box span.number { font-size: clamp(1.2rem, 5.5vw, 1.6rem); }
-  }
-
-  @media (max-width: 480px) {
-    .meja-tag {
-      font-size: 0.88rem;
-      padding: 5px 10px;
-    }
-    .meja-tag .remove {
-      font-size: 1.05rem;
-      width: 18px;
-      height: 18px;
+    .fab {
+      bottom: 20px;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      font-size: 1.8rem;
     }
   }
 </style>
@@ -490,14 +430,9 @@ td:nth-child(8) input {             /* Nominal */
 </div>
 
 <div class="controls" style="gap: 10px; justify-content: center; flex-wrap: wrap;">
-
-  <!-- Reservasi -->
   <button class="primary" onclick="addRow()">+ Reservasi Baru</button>
-
-  <!-- Hapus Data -->
   <button class="danger" id="bulkDeleteBtn" onclick="hapusTerpilih()" disabled>Hapus Terpilih</button>
 
-  <!-- Pengaturan (dropdown) -->
   <div class="dropdown">
     <button class="config dropbtn">Pengaturan ▼</button>
     <div class="dropdown-content">
@@ -506,7 +441,6 @@ td:nth-child(8) input {             /* Nominal */
     </div>
   </div>
 
-  <!-- Data Management (dropdown) -->
   <div class="dropdown">
     <button class="config dropbtn">Manajemen Data ▼</button>
     <div class="dropdown-content">
@@ -515,7 +449,6 @@ td:nth-child(8) input {             /* Nominal */
     </div>
   </div>
 
-  <!-- Ekspor Excel (dropdown) -->
   <div class="dropdown">
     <button class="primary dropbtn">Ekspor Excel ▼</button>
     <div class="dropdown-content">
@@ -523,7 +456,6 @@ td:nth-child(8) input {             /* Nominal */
       <button onclick="exportExcelAll()">Semua Tanggal</button>
     </div>
   </div>
-
 </div>
 
 <table id="rsvTable">
@@ -548,221 +480,10 @@ td:nth-child(8) input {             /* Nominal */
   <div class="meja-grid" id="mejaGrid"></div>
 </div>
 
+<!-- Floating Action Button -->
+<button class="fab" title="Tambah Reservasi Baru" onclick="addRow()">+</button>
+
 <script>
-// ────────────────────────────────────────────────
-// Dropdown
-// ────────────────────────────────────────────────
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-  if (!e.target.matches('.dropbtn')) {
-    document.querySelectorAll('.dropdown').forEach(d => {
-      d.classList.remove('show');
-    });
-  }
-});
-
-// Toggle dropdown on click (for better mobile experience)
-document.querySelectorAll('.dropdown').forEach(dropdown => {
-  const btn = dropdown.querySelector('.dropbtn');
-  btn.addEventListener('click', function(e) {
-    e.stopImmediatePropagation();
-    
-    // Close all other dropdowns first
-    document.querySelectorAll('.dropdown').forEach(d => {
-      if (d !== dropdown) d.classList.remove('show');
-    });
-    
-    dropdown.classList.toggle('show');
-  });
-});
-// ────────────────────────────────────────────────
-// EXPORT TO EXCEL (using SheetJS)
-// ────────────────────────────────────────────────
-
-function exportExcelDaily() {
-  const rows = getDataForDate(currentDate);
-  if (rows.length === 0) {
-    alert("Tidak ada reservasi untuk tanggal ini.");
-    return;
-  }
-
-  // Prepare data with headers (same order as your table)
-  const data = [
-    ["Tanggal", "Nama", "Nomor HP", "Pax", "No Meja", "DP / Lunas", "Nominal"],
-    ...rows.map(r => [
-      r.tanggal || currentDate,
-      r.nama || "",
-      r.hp || "",
-      r.pax || "",
-      r.meja || "",
-      r.status || "DP",
-      r.nominal ? Number(r.nominal) : 0
-    ])
-  ];
-
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  
-  // Auto-width columns (optional but nice)
-  ws['!cols'] = [
-    { wch: 12 },   // Tanggal
-    { wch: 20 },   // Nama
-    { wch: 15 },   // HP
-    { wch: 8  },   // Pax
-    { wch: 18 },   // No Meja
-    { wch: 10 },   // Status
-    { wch: 14 }    // Nominal
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, currentDate);
-
-  const filename = `reservasi-${getSafeStoreName()}-${currentDate}.xlsx`;
-  XLSX.writeFile(wb, filename);
-
-  alert(`Data hari ini (${currentDate}) telah diekspor ke Excel!`);
-}
-
-function exportExcelAll() {
-  const allData = loadAllData();
-  const allDates = Object.keys(allData);
-
-  if (allDates.length === 0) {
-    alert("Belum ada data reservasi sama sekali.");
-    return;
-  }
-
-  let totalRows = 0;
-  allDates.forEach(date => { totalRows += allData[date].length; });
-
-  if (totalRows === 0) {
-    alert("Semua tanggal kosong.");
-    return;
-  }
-
-  // Flat list format
-  const headers = [
-    "Tanggal", "Nama", "Nomor HP", "Pax", "No Meja", "DP / Lunas", "Nominal"
-  ];
-
-  const data = [headers];
-
-  allDates.sort().forEach(date => {
-    allData[date].forEach(r => {
-      data.push([
-        date,
-        r.nama || "",
-        r.hp || "",
-        r.pax || "",
-        r.meja || "",
-        r.status || "DP",
-        r.nominal ? Number(r.nominal) : 0
-      ]);
-    });
-  });
-
-  const ws = XLSX.utils.aoa_to_sheet(data);
-
-  // Optional: wider columns for long lists
-  ws['!cols'] = [
-    { wch: 12 },
-    { wch: 22 },
-    { wch: 16 },
-    { wch: 8  },
-    { wch: 20 },
-    { wch: 10 },
-    { wch: 14 }
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Semua Reservasi");
-
-  const filename = `reservasi-SEMUA-${getSafeStoreName()}-${getTodayFormatted()}.xlsx`;
-  XLSX.writeFile(wb, filename);
-
-  alert(`Semua data (${totalRows} baris) telah diekspor ke Excel!`);
-}
-// ────────────────────────────────────────────────
-// EXPORT / IMPORT JSON
-// ────────────────────────────────────────────────
-// Helper - supaya nama file lebih rapi
-function getSafeStoreName() {
-  return (STORE_NAME || "reservasi")
-    .replace(/[^a-z0-9]/gi, '-')
-    .replace(/-+/g, '-')
-    .toLowerCase();
-}
-function exportData() {
-  const allData = loadAllData();           // ambil semua reservasi semua tanggal
-  const config  = {
-    name: STORE_NAME,
-    tables: JUMLAH_MEJA
-  };
-
-  const exportPayload = {
-    config: config,
-    reservations: allData,
-    exportedAt: new Date().toISOString(),
-    version: "1.0"   // supaya future-proof
-  };
-
-  const jsonString = JSON.stringify(exportPayload, null, 2);
-  const blob = new Blob([jsonString], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `reservasi-${getSafeStoreName()}-${getTodayFormatted()}.json`;
-  a.click();
-
-  URL.revokeObjectURL(url);
-  alert("Data berhasil diekspor!\nSimpan file JSON ini dengan baik.");
-}
-
-function importData() {
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = ".json";
-  input.onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = event => {
-      try {
-        const data = JSON.parse(event.target.result);
-
-        // Basic validation
-        if (!data.reservations || typeof data.reservations !== "object") {
-          throw new Error("Format file tidak valid (tidak ada field 'reservations')");
-        }
-
-        // Restore config (optional - tanya dulu)
-        if (data.config) {
-          if (confirm(`Update nama toko menjadi "${data.config.name}" dan jumlah meja menjadi ${data.config.tables}?`)) {
-            STORE_NAME = data.config.name;
-            JUMLAH_MEJA = Number(data.config.tables);
-            saveConfig();
-          }
-        }
-
-        // Restore semua data reservasi
-        saveAllData(data.reservations);
-
-        alert("Data berhasil diimpor!\nSilakan refresh halaman atau ganti tanggal untuk melihat hasilnya.");
-
-        // Refresh tampilan saat ini
-        updateDisplay();
-        loadAndRenderCurrentDate();
-
-      } catch (err) {
-        alert("Gagal membaca file JSON:\n" + err.message);
-      }
-    };
-    reader.readAsText(file);
-  };
-
-  input.click();
-}
 // ────────────────────────────────────────────────
 // CONFIG & STORAGE
 // ────────────────────────────────────────────────
@@ -771,7 +492,7 @@ const DATA_KEY   = "reservasi-data-by-date";
 
 let JUMLAH_MEJA = 25;
 let STORE_NAME  = "Reservasi Meja";
-let currentDate = getTodayFormatted(); // format DD-MM-YY
+let currentDate = getTodayFormatted();
 
 function getTodayFormatted() {
   const now = new Date();
@@ -781,10 +502,11 @@ function getTodayFormatted() {
   return `${dd}-${mm}-${yy}`;
 }
 
-function formatDateToKey(dateStr) { // menerima YYYY-MM-DD → DD-MM-YY
-  if (!dateStr) return currentDate;
-  const [yyyy, mm, dd] = dateStr.split('-');
-  return `${dd}-${mm}-${yyyy.slice(-2)}`;
+function datePickerToKey(pickerValue) {
+  if (!pickerValue) return currentDate;
+  const [yyyy, mm, dd] = pickerValue.split('-');
+  const yy = yyyy.slice(-2);
+  return `${dd}-${mm}-${yy}`;
 }
 
 function loadConfig() {
@@ -823,26 +545,17 @@ function saveDataForDate(dateKey, rows) {
   saveAllData(all);
 }
 
-// ── Add this helper to convert YYYY-MM-DD → DD-MM-YY ──
-function datePickerToKey(pickerValue) {
-  if (!pickerValue) return currentDate;
-  const [yyyy, mm, dd] = pickerValue.split('-');
-  const yy = yyyy.slice(-2);
-  return `${dd}-${mm}-${yy}`;
-}
-
-// ── Modified: now supports both offset and direct picker change ──
+// ────────────────────────────────────────────────
+// DATE NAVIGATION
+// ────────────────────────────────────────────────
 function changeDate(offset) {
   const picker = document.getElementById("datePicker");
   
   if (offset === 0) {
-    // Direct selection from calendar
     if (picker.value) {
       currentDate = datePickerToKey(picker.value);
     }
-    // else: invalid/empty → keep current
   } else {
-    // Arrow buttons (offset ±1)
     let [dd, mm, yy] = currentDate.split('-').map(Number);
     const dateObj = new Date(2000 + yy, mm - 1, dd);
     dateObj.setDate(dateObj.getDate() + offset);
@@ -852,8 +565,6 @@ function changeDate(offset) {
     yy = String(dateObj.getFullYear()).slice(-2);
     
     currentDate = `${dd}-${mm}-${yy}`;
-    
-    // Also sync the picker input
     const fullYear = "20" + yy;
     picker.value = `${fullYear}-${mm}-${dd}`;
   }
@@ -866,14 +577,12 @@ function updateDisplay() {
   document.getElementById("subtitle").textContent = `Total Meja: ${JUMLAH_MEJA}`;
   document.getElementById("currentDateDisplay").textContent = currentDate;
 
-  // Sync date picker (YYYY-MM-DD format)
   const [dd, mm, yy] = currentDate.split('-');
-  const fullYear = "20" + yy;               // assuming 2000–2099
+  const fullYear = "20" + yy;
   document.getElementById("datePicker").value = `${fullYear}-${mm}-${dd}`;
 
   loadAndRenderCurrentDate();
 }
-
 
 function loadAndRenderCurrentDate() {
   const tbody = document.getElementById('tableBody');
@@ -885,6 +594,9 @@ function loadAndRenderCurrentDate() {
   refreshAll();
 }
 
+// ────────────────────────────────────────────────
+// CONFIGURATION
+// ────────────────────────────────────────────────
 function konfigurasiUlang() {
   const namaBaru = prompt("Nama event / toko saat ini:", STORE_NAME);
   const jmlBaruStr = prompt("Jumlah meja saat ini:", JUMLAH_MEJA);
@@ -913,7 +625,7 @@ function konfigurasiUlang() {
 function initConfig() {
   loadConfig();
   if (!localStorage.getItem(CONFIG_KEY)) {
-    const nama = prompt("Nama toko / event:", "Cimahi RSV Ramadhan 2026");
+    const nama = prompt("Nama toko / event:", "Reservasi Meja");
     const jml  = prompt("Jumlah meja:", "25");
     if (nama?.trim()) STORE_NAME = nama.trim();
     const parsed = Number(jml);
@@ -924,9 +636,8 @@ function initConfig() {
 }
 
 // ────────────────────────────────────────────────
-// DATA & MEJA LOGIC (sama seperti sebelumnya, tapi disesuaikan)
+// MEJA & BOOKING LOGIC
 // ────────────────────────────────────────────────
-
 function getBookedMejaSet() {
   const set = new Set();
   document.querySelectorAll('.meja-hidden').forEach(hidden => {
@@ -955,7 +666,6 @@ function parseMejaRangeOrList(input) {
 }
 
 function renderMejaTags(container, selectedValue = "") {
-  const booked = getBookedMejaSet();
   const selected = selectedValue.split(',').map(n => n.trim()).filter(Boolean);
 
   let html = '';
@@ -986,10 +696,41 @@ function refreshAll() {
   const booked = getBookedMejaSet();
   const grid = document.getElementById('mejaGrid');
   grid.innerHTML = '';
+
+  // Build map: meja number → array of customer names
+  const mejaToNames = {};
+
+  document.querySelectorAll('#tableBody tr').forEach(tr => {
+    const nama = tr.querySelector('.nama').value.trim();
+    const mejaStr = tr.querySelector('.meja-hidden').value.trim();
+    if (!nama || !mejaStr) return;
+
+    mejaStr.split(',').forEach(m => {
+      const num = m.trim();
+      if (!num) return;
+      if (!mejaToNames[num]) mejaToNames[num] = [];
+      if (!mejaToNames[num].includes(nama)) {
+        mejaToNames[num].push(nama);
+      }
+    });
+  });
+
   for (let i = 1; i <= JUMLAH_MEJA; i++) {
+    const strI = String(i);
+    const isBooked = booked.has(strI);
+    const names = mejaToNames[strI] || [];
+
     const div = document.createElement('div');
-    div.className = 'meja-box ' + (booked.has(String(i)) ? 'dipesan' : 'tersedia');
-    div.innerHTML = `<span class="number">${i}</span><span>${booked.has(String(i)) ? 'Dipesan' : 'Tersedia'}</span>`;
+    div.className = 'meja-box ' + (isBooked ? 'dipesan' : 'tersedia');
+
+    let label = isBooked ? names.join(', ') : 'Tersedia';
+    if (label.length > 18) label = label.substring(0, 15) + '...';
+
+    div.innerHTML = `
+      <span class="number">${i}</span>
+      <span>${label}</span>
+    `;
+
     grid.appendChild(div);
   }
 
@@ -1006,7 +747,7 @@ function saveCurrentDateData() {
   const rows = [];
   document.querySelectorAll('#tableBody tr').forEach(tr => {
     rows.push({
-      tanggal: currentDate, // selalu simpan tanggal aktif
+      tanggal: currentDate,
       nama:    tr.querySelector('.nama').value,
       hp:      tr.querySelector('.hp').value,
       pax:     tr.querySelector('.pax').value,
@@ -1028,11 +769,13 @@ function toggleSelectAll(cb) {
   updateBulkDeleteButton();
 }
 
+// ────────────────────────────────────────────────
+// ROW MANAGEMENT
+// ────────────────────────────────────────────────
 function addRow(data = {}) {
   const tbody = document.getElementById('tableBody');
   const tr = document.createElement('tr');
 
-  // Jika data.tanggal ada → pakai itu, tapi default pakai currentDate
   const displayTanggal = data.tanggal || currentDate;
 
   tr.innerHTML = `
@@ -1135,14 +878,194 @@ function clearAllData() {
 }
 
 // ────────────────────────────────────────────────
+// EXPORT / IMPORT
+// ────────────────────────────────────────────────
+function getSafeStoreName() {
+  return (STORE_NAME || "reservasi")
+    .replace(/[^a-z0-9]/gi, '-')
+    .replace(/-+/g, '-')
+    .toLowerCase();
+}
+
+function exportData() {
+  const allData = loadAllData();
+  const config  = { name: STORE_NAME, tables: JUMLAH_MEJA };
+
+  const exportPayload = {
+    config: config,
+    reservations: allData,
+    exportedAt: new Date().toISOString(),
+    version: "1.0"
+  };
+
+  const jsonString = JSON.stringify(exportPayload, null, 2);
+  const blob = new Blob([jsonString], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `reservasi-${getSafeStoreName()}-${getTodayFormatted()}.json`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+  alert("Data berhasil diekspor!\nSimpan file JSON ini dengan baik.");
+}
+
+function importData() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = event => {
+      try {
+        const data = JSON.parse(event.target.result);
+
+        if (!data.reservations || typeof data.reservations !== "object") {
+          throw new Error("Format file tidak valid (tidak ada field 'reservations')");
+        }
+
+        if (data.config) {
+          if (confirm(`Update nama toko menjadi "${data.config.name}" dan jumlah meja menjadi ${data.config.tables}?`)) {
+            STORE_NAME = data.config.name;
+            JUMLAH_MEJA = Number(data.config.tables);
+            saveConfig();
+          }
+        }
+
+        saveAllData(data.reservations);
+
+        alert("Data berhasil diimpor!\nSilakan refresh halaman atau ganti tanggal untuk melihat hasilnya.");
+
+        updateDisplay();
+        loadAndRenderCurrentDate();
+
+      } catch (err) {
+        alert("Gagal membaca file JSON:\n" + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  input.click();
+}
+
+function exportExcelDaily() {
+  const rows = getDataForDate(currentDate);
+  if (rows.length === 0) {
+    alert("Tidak ada reservasi untuk tanggal ini.");
+    return;
+  }
+
+  const data = [
+    ["Tanggal", "Nama", "Nomor HP", "Pax", "No Meja", "DP / Lunas", "Nominal"],
+    ...rows.map(r => [
+      r.tanggal || currentDate,
+      r.nama || "",
+      r.hp || "",
+      r.pax || "",
+      r.meja || "",
+      r.status || "DP",
+      r.nominal ? Number(r.nominal) : 0
+    ])
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [
+    { wch: 12 }, { wch: 20 }, { wch: 15 }, { wch: 8  },
+    { wch: 18 }, { wch: 10 }, { wch: 14 }
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, currentDate);
+
+  const filename = `reservasi-${getSafeStoreName()}-${currentDate}.xlsx`;
+  XLSX.writeFile(wb, filename);
+
+  alert(`Data hari ini (${currentDate}) telah diekspor ke Excel!`);
+}
+
+function exportExcelAll() {
+  const allData = loadAllData();
+  const allDates = Object.keys(allData);
+
+  if (allDates.length === 0) {
+    alert("Belum ada data reservasi sama sekali.");
+    return;
+  }
+
+  let totalRows = 0;
+  allDates.forEach(date => { totalRows += allData[date].length; });
+
+  if (totalRows === 0) {
+    alert("Semua tanggal kosong.");
+    return;
+  }
+
+  const headers = ["Tanggal", "Nama", "Nomor HP", "Pax", "No Meja", "DP / Lunas", "Nominal"];
+  const data = [headers];
+
+  allDates.sort().forEach(date => {
+    allData[date].forEach(r => {
+      data.push([
+        date,
+        r.nama || "",
+        r.hp || "",
+        r.pax || "",
+        r.meja || "",
+        r.status || "DP",
+        r.nominal ? Number(r.nominal) : 0
+      ]);
+    });
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [
+    { wch: 12 }, { wch: 22 }, { wch: 16 }, { wch: 8  },
+    { wch: 20 }, { wch: 10 }, { wch: 14 }
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Semua Reservasi");
+
+  const filename = `reservasi-SEMUA-${getSafeStoreName()}-${getTodayFormatted()}.xlsx`;
+  XLSX.writeFile(wb, filename);
+
+  alert(`Semua data (${totalRows} baris) telah diekspor ke Excel!`);
+}
+
+// ────────────────────────────────────────────────
+// DROPDOWN HANDLING
+// ────────────────────────────────────────────────
+document.addEventListener('click', function(e) {
+  if (!e.target.matches('.dropbtn')) {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+  }
+});
+
+document.querySelectorAll('.dropdown').forEach(dropdown => {
+  const btn = dropdown.querySelector('.dropbtn');
+  btn.addEventListener('click', function(e) {
+    e.stopImmediatePropagation();
+    document.querySelectorAll('.dropdown').forEach(d => {
+      if (d !== dropdown) d.classList.remove('show');
+    });
+    dropdown.classList.toggle('show');
+  });
+});
+
+// ────────────────────────────────────────────────
 // INIT
 // ────────────────────────────────────────────────
 window.onload = () => {
   initConfig();
-  // Load data hari ini (atau tanggal terakhir yang dilihat bisa ditambahkan nanti)
   loadAndRenderCurrentDate();
 };
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
